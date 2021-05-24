@@ -16,7 +16,6 @@
     <ul class="nav-dropdown-items">
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('apptype') }}'><i class='nav-icon la la-rocket'></i> App Type</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('project') }}'><i class='nav-icon la la-industry'></i> Projects</a></li>
-        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('tool') }}'><i class='nav-icon la la-tools'></i> Tools</a></li>
     </ul>
 </li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('skill') }}'><i class='nav-icon la la-glasses'></i> Skills</a></li>

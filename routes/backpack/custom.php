@@ -16,7 +16,6 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('bio', 'BioCrudController');
     Route::crud('apptype', 'ApptypeCrudController');
-    Route::crud('tool', 'ToolCrudController');
     Route::crud('profession', 'ProfessionCrudController');
     Route::crud('hobby', 'HobbyCrudController');
     Route::crud('project', 'ProjectCrudController');

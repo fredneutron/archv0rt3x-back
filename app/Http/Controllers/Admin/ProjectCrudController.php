@@ -105,7 +105,10 @@ class ProjectCrudController extends CrudController
         CRUD::addField([
             'name' => 'tools',
             'label' => 'Tools',
-            'type' => 'text',
+            'type' => 'select2_multiple',
+            'entity' => 'tools',
+            'attribute' => 'name',
+            'pivot' => true,
         ]);
 
         CRUD::addField( [

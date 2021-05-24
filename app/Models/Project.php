@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use \App\Models\AppType;
+use \App\Models\Skill;
 use \App\Models\User;
 
 class Project extends Model
@@ -63,6 +64,12 @@ class Project extends Model
     public function type()
     {
         return $this->hasOne(AppType::class);
+    }
+
+    public function tools()
+    {
+        return $this->hasMany(Skill::class)
+            ->where('type', 'hard');
     }
 
     /*
