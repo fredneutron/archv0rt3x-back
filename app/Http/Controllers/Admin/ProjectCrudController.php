@@ -73,7 +73,7 @@ class ProjectCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'type',
+            'name' => 'type_id',
             'label' => 'Type',
             'type' => 'select',
             'entity' => 'type',
@@ -109,6 +109,9 @@ class ProjectCrudController extends CrudController
             'entity' => 'tools',
             'attribute' => 'name',
             'pivot' => true,
+            'options'   => (function ($query) {
+                return $query->where('type', 'hard')->get();
+            }),
         ]);
 
         CRUD::addField( [

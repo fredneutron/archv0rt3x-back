@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProjectTable extends Migration
+class CreateToolsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,14 @@ class CreateProjectTable extends Migration
      */
     public function up()
     {
-        Schema::create('project', function (Blueprint $table) {
+        Schema::create('tools', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('type_id')
-                ->constrained('app_type')
+            $table->foreignId('project_id')
+                ->constrained('project')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('description', 2000);
-            $table->string('image');
-            $table->string('url');
-            $table->foreignId('user_id')
-                ->constrained('users')
+            $table->foreignId('skill_id')
+                ->constrained('skill')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->timestamps();
@@ -38,6 +34,6 @@ class CreateProjectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project');
+        Schema::dropIfExists('tools');
     }
 }

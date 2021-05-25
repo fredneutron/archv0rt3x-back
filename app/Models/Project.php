@@ -63,13 +63,12 @@ class Project extends Model
 
     public function type()
     {
-        return $this->hasOne(AppType::class);
+        return $this->belongsTo(AppType::class);
     }
 
     public function tools()
     {
-        return $this->hasMany(Skill::class)
-            ->where('type', 'hard');
+        return $this->belongsToMany(Skill::class, 'tools', 'project_id', 'skill_id');
     }
 
     /*
@@ -147,9 +146,4 @@ class Project extends Model
        }
     }
 
-    // public function setTools($value)
-    // {
-    //     // convert to string and save to the database
-    //     $this->attributes[$attribute_name] = implode(', ', $value);
-    // }
 }
