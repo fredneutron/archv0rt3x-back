@@ -83,6 +83,11 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getImageAttribute($value)
+    {
+        return env('Storage_Prefix').$value;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

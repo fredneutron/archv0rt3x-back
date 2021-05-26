@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Models\Hobby;
+use App\Models\Project;
 
 class User extends Authenticatable
 {
@@ -46,5 +47,10 @@ class User extends Authenticatable
     public function hobby()
     {
         return $this->hasMany(Hobby::class);
+    }
+
+    public function project()
+    {
+        return $this->hasMany(Project::class);
     }
 }
