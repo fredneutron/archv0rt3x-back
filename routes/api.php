@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArchV0rt3xController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +19,4 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/user', function (Request $request) {
-    return "Hello";
-    // return $request->user();
-});
+Route::get('/hobbies', [ArchV0rt3xController::class, 'hobbies']);

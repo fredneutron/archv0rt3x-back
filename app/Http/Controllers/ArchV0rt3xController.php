@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 
-class ArchV0rt3x extends Controller {
+class ArchV0rt3xController extends Controller {
 
     public function __construct() {
-        $this->user = User::where('name', 'Babatunde Adelabu');
+        $this->user = User::with([
+            'hobby'
+        ])->where('name', 'Babatunde Adelabu')->first();
     }
     /**
      * Show the profile for a given user.
@@ -17,8 +20,8 @@ class ArchV0rt3x extends Controller {
      * @return \Illuminate\View\View
      */
 
-     public function show()
+     public function hobbies(Request $request)
      {
-         $user = User::where('name', 'Babatunde Adelabu');
+        return $this->user->hobby->implode('name', ', ');
      }
 }
