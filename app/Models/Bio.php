@@ -68,6 +68,11 @@ class Bio extends Model
         return env('Storage_Prefix').$value;
     }
 
+    public function getFullName()
+    {
+        return $this->first_name.' '.$this->other_name.' '.$this->last_name;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
