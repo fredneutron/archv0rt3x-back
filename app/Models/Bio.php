@@ -63,6 +63,11 @@ class Bio extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getProfilePictureAttribute($value)
+    {
+        return env('Storage_Prefix').$value;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

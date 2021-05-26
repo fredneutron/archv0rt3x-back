@@ -21,3 +21,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/hobbies', [ArchV0rt3xController::class, 'hobbies']);
 Route::get('/projects', [ArchV0rt3xController::class, 'projects']);
+Route::get('/socials', [ArchV0rt3xController::class, 'socials']);
