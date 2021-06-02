@@ -10,6 +10,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Models\Education;
 use App\Models\Hobby;
 use App\Models\Social;
+use App\Models\Work;
 
 class User extends Authenticatable
 {
@@ -58,5 +59,10 @@ class User extends Authenticatable
     public function social()
     {
         return $this->hasMany(Social::class);
+    }
+
+    public function work()
+    {
+        return $this->hasMany(Work::class);
     }
 }

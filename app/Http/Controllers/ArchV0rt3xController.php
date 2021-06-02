@@ -16,7 +16,8 @@ class ArchV0rt3xController extends Controller
         $this->user = User::with([
             'education',
             'hobby',
-            'social'
+            'social',
+            'work'
         ])->where('name', 'Babatunde Adelabu')->first();
     }
 
@@ -45,5 +46,10 @@ class ArchV0rt3xController extends Controller
         return $this->user->social->map(function ($social) {
             return ['name' => $social->name, 'url' => $social->url];
         })->all();
+    }
+
+    public function work(Request $request)
+    {
+        return $this->user->work;
     }
 }
