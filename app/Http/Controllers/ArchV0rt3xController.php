@@ -17,6 +17,7 @@ class ArchV0rt3xController extends Controller
             'education',
             'hobby',
             'profession',
+            'skill',
             'social',
             'work'
         ])->where('name', 'Babatunde Adelabu')->first();
@@ -45,6 +46,13 @@ class ArchV0rt3xController extends Controller
     public function projects(Request $request)
     {
         return Project::with(['tools', 'type'])->where('user_id', $this->user->id)->get();
+    }
+
+    public function skill(Request $request)
+    {
+        return $this->user->skill->mapToGroups(function ($skill, $key) {
+            return [$skill['type'] => $skill['name']];
+        })->all();
     }
 
     public function socials(Request $request)
