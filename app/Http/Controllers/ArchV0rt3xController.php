@@ -16,6 +16,7 @@ class ArchV0rt3xController extends Controller
         $this->user = User::with([
             'education',
             'hobby',
+            'profession',
             'social',
             'work'
         ])->where('name', 'Babatunde Adelabu')->first();
@@ -34,6 +35,11 @@ class ArchV0rt3xController extends Controller
     public function hobbies(Request $request)
     {
         return $this->user->hobby->implode('name', ', ');
+    }
+
+    public function profession(Request $request)
+    {
+        return $this->user->profession->pluck('name')->all();
     }
 
     public function projects(Request $request)

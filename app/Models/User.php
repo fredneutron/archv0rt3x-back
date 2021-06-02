@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Models\Education;
 use App\Models\Hobby;
+use App\Models\Profession;
 use App\Models\Social;
 use App\Models\Work;
 
@@ -54,6 +55,11 @@ class User extends Authenticatable
     public function hobby()
     {
         return $this->hasMany(Hobby::class);
+    }
+
+    public function profession()
+    {
+        return $this->hasMany(Profession::class);
     }
 
     public function social()

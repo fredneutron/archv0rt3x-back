@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/biography', [ArchV0rt3xController::class, 'biography']);
 Route::get('/educations', [ArchV0rt3xController::class, 'education']);
 Route::get('/hobbies', [ArchV0rt3xController::class, 'hobbies']);
+Route::get('/professions', [ArchV0rt3xController::class, 'profession']);
 Route::get('/projects', [ArchV0rt3xController::class, 'projects']);
 Route::get('/socials', [ArchV0rt3xController::class, 'socials']);
 Route::get('/works', [ArchV0rt3xController::class, 'work']);
