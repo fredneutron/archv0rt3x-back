@@ -14,6 +14,7 @@ class ArchV0rt3xController extends Controller
     public function __construct()
     {
         $this->user = User::with([
+            'education',
             'hobby',
             'social'
         ])->where('name', 'Babatunde Adelabu')->first();
@@ -22,6 +23,11 @@ class ArchV0rt3xController extends Controller
     public function biography(Request $request)
     {
         return Bio::where(['first_name' => 'Babatunde', 'last_name' => 'Adelabu'])->first();
+    }
+
+    public function education(Request $request)
+    {
+        return $this->user->education;
     }
 
     public function hobbies(Request $request)
