@@ -20,7 +20,10 @@ class JWT extends BaseMiddleware
     public function handle($request, Closure $next)
     {
         try {
-            JWTAuth::parseToken()->authenticate();
+            $word = JWTAuth::parseToken()->authenticate();
+            if (!empty($word)) {
+                return $next($request);
+            }
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
                 return response()->json(['status' => 'Token is Invalid'], 401);

@@ -26,4 +26,5 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('/socials', [ArchV0rt3xController::class, 'socials']);
     Route::get('/skills', [ArchV0rt3xController::class, 'skill']);
     Route::get('/works', [ArchV0rt3xController::class, 'work']);
+    Route::post('/mail', [ArchV0rt3xController::class, 'mail']);
 });

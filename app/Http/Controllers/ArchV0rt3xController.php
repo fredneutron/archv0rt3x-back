@@ -25,7 +25,18 @@ class ArchV0rt3xController extends Controller
 
     public function biography(Request $request)
     {
-        return Bio::where(['first_name' => 'Babatunde', 'last_name' => 'Adelabu'])->first();
+        $bio = Bio::where(['first_name' => 'Babatunde', 'last_name' => 'Adelabu'])->first();
+
+        return collect([
+            'name' => $bio->first_name.' '.$bio->last_name,
+            'fullName' => $bio->first_name.' '.$bio->other_name.' '.$bio->last_name,
+            'objective' => $bio->objective,
+            'residential_address' => $bio->residential_address,
+            'current_location' => $bio->current_location,
+            'image' => $bio->profile_picture,
+            'email' => $bio->email,
+            'phone_number' => $bio->phone_number
+        ]);
     }
 
     public function education(Request $request)
@@ -36,6 +47,12 @@ class ArchV0rt3xController extends Controller
     public function hobbies(Request $request)
     {
         return $this->user->hobby->implode('name', ', ');
+    }
+
+    public function mail(Request $request)
+    {
+        // $request = $request->all();
+        return [ 'name' => $request->name]; 
     }
 
     public function profession(Request $request)
@@ -64,6 +81,6 @@ class ArchV0rt3xController extends Controller
 
     public function work(Request $request)
     {
-        return $this->user->work;
+        return $this->user->work->sortByDesc('start_on')->values()->all();
     }
 }

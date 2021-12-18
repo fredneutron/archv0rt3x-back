@@ -139,7 +139,7 @@ class BioCrudController extends CrudController
             'type' => 'image',
             'upload' => true,
             'crop' => true,
-            'prefix' => env('Storage_Prefix'),
+            'aspect_ratio' => 1,
         ]);
 
         CRUD::addField( [

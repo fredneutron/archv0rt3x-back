@@ -93,7 +93,6 @@ class ProjectCrudController extends CrudController
             'type' => 'image',
             'upload' => true,
             'crop' => true,
-            'prefix' => env('Storage_Prefix')
         ]);
 
         CRUD::addField([
