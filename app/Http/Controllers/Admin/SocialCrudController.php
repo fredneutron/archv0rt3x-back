@@ -73,7 +73,7 @@ class SocialCrudController extends CrudController
             'options' => [
                 'facebook' => 'Facebook',
                 'github' => 'Github',
-                'instragam' => 'Instragam',
+                'instagram' => 'Instagram',
                 'linkedin' => 'Linkedin',
                 'twitter' => 'Twitter'
             ],

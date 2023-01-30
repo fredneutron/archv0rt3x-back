@@ -153,6 +153,15 @@ class BioCrudController extends CrudController
             'label' => 'Phone number',
             'type' => 'number'
         ]);
+
+        CRUD::addField( [
+            'name' => 'user_id',
+            'label' => 'User',
+            'type' => 'select',
+            'entity' => 'user',
+            'attribute' => 'name',
+            'model' => '\App\Models\User'
+        ]);
     }
 
     /**

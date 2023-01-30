@@ -37,9 +37,7 @@ class Profession extends Model
 
     public function user()
     {
-        return $this->belongsTo('\App\Models\User')->withDefault([
-            'name' => 'Babatunde Adelabu',
-        ]);
+        return $this->belongsTo('\App\Models\User');
     }
 
     /*

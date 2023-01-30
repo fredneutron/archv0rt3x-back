@@ -13,6 +13,7 @@ use App\Models\Profession;
 use App\Models\Skill;
 use App\Models\Social;
 use App\Models\Work;
+use App\Models\Bio;
 
 class User extends Authenticatable
 {
@@ -47,6 +48,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function bio() {
+        return $this->hasOne(Bio::class);
+    }
 
     public function education()
     {

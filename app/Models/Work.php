@@ -38,9 +38,7 @@ class Work extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class)->withDefault([
-            'name' => 'Babatunde Adelabu',
-        ]);
+        return $this->belongsTo(User::class);
     }
 
     /*

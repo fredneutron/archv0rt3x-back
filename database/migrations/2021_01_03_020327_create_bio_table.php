@@ -28,6 +28,10 @@ class CreateBioTable extends Migration
             $table->string('profile_picture', 6000);
             $table->string('email')->unique();
             $table->string('phone_number', 20);
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

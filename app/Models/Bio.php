@@ -50,7 +50,10 @@ class Bio extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -85,54 +88,54 @@ class Bio extends Model
         $destination_path = '/images/profile_picture/';
 
         // if the image was erased
-        // if($value == null){
-        //     // delete the image from cloud
-        //     Cloudder::destoryImage(Cloudder::getPublicId());
-        //     Cloudder::delete(Cloudder::getPublicId());
-        // }
+        if (env('IMAGE_UPLOAD') == "cloudinary") {
+            if($value == null){
+                // delete the image from cloud
+                Cloudder::destoryImage(Cloudder::getPublicId());
+                Cloudder::delete(Cloudder::getPublicId());
+            }
+    
+            // if a base64 was sent, store it in the db
+            if (Str::startsWith($value, 'data:image'))
+            {
+                // Generate a public_id
+                $public_id = md5($value.time());
+    
+                // upload the image to Cloudinary
+                Cloudder::upload($value,null, ['folder' => $destination_path, 'public_id' => $public_id]);
+    
+                // get image url from cloudinary
+                //$image_url = Cloudder::secureShow(Cloudder::getPublicId());
+                $image_url = Cloudder::secureShow(Cloudder::getPublicId(), ['width'=> 'auto', 'height' => 1200, 'crop'=> 'fit']);
+    
+                // Save the path to the database
+                $this->attributes[$attribute_name] = $image_url;
+            }
+        } else if (env('IMAGE_UPLOAD') == "local") {
+            // if the image was erased
+            if ($value == null) {
+                // delete the image from disk
+                Storage::disk(env('Disk'))->delete($this->{$attribute_name});
 
-        // // if a base64 was sent, store it in the db
-        // if (starts_with($value, 'data:image'))
-        // {
-        //     // Generate a public_id
-        //     $public_id = md5($value.time());
+                // set null in the database column
+                $this->attributes[$attribute_name] = null;
+            }
 
-        //     // upload the image to Cloudinary
-        //     Cloudder::upload($value,null, ['folder' => $destination_path, 'public_id' => $public_id]);
+            // if a base64 was sent, store it in the db
+            if (Str::startsWith($value, 'data:image'))
+            {
+                // Make the image
+                $image = Image::make($value);
 
-        //     // get image url from cloudinary
-        //     //$image_url = Cloudder::secureShow(Cloudder::getPublicId());
-	    //     $image_url = Cloudder::secureShow(Cloudder::getPublicId(), ['width'=> 'auto', 'height' => 1200, 'crop'=> 'fit']);
+                // Generate a filename
+                $filename = $destination_path . md5($value.time()).'.jpg';
 
-        //     // Save the path to the database
-        //     $this->attributes[$attribute_name] = $image_url;
-        // }
+                // Store the image on the disk.
+                Storage::disk(env('Disk'))->put($filename, $image->stream());
 
-
-            // local storage image upload
-       // if the image was erased
-       if ($value == null){
-           // delete the image from disk
-           Storage::disk(env('Disk'))->delete($this->{$attribute_name});
-
-           // set null in the database column
-           $this->attributes[$attribute_name] = null;
-       }
-
-       // if a base64 was sent, store it in the db
-       if (Str::startsWith($value, 'data:image'))
-       {
-           // Make the image
-           $image = Image::make($value);
-
-           // Generate a filename
-           $filename = $destination_path . md5($value.time()).'.jpg';
-
-           // Store the image on the disk.
-           Storage::disk(env('Disk'))->put($filename, $image->stream());
-
-           // Save the path to the database
-           $this->attributes[$attribute_name] = $filename;
-       }
+                // Save the path to the database
+                $this->attributes[$attribute_name] = $filename;
+            }
+        }  
     }
 }
