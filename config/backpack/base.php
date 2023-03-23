@@ -50,7 +50,8 @@ return [
         // 'packages/noty/noty.css',
 
         // Example (the css above, loaded from CDN instead)
-        'https://github.com/DigitallyHappy/BackStrap/blob/master/src/css/style.min.css',
+        'https://cdn.jsdelivr.net/gh/DigitallyHappy/BackStrap/blob/master/src/css/style.min.css',
+        // 'https://github.com/DigitallyHappy/BackStrap/blob/master/src/css/style.min.css',
         'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css',
         'https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css',
 
