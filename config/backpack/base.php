@@ -42,6 +42,7 @@ return [
 
     // CSS files that are loaded in all pages, using Laravel's asset() helper
     'styles' => [
+        'bundle.css',
         // 'packages/backpack/base/css/bundle.css',
 
         // Here's what's inside the bundle:
@@ -50,10 +51,9 @@ return [
         // 'packages/noty/noty.css',
 
         // Example (the css above, loaded from CDN instead)
-        'https://cdn.jsdelivr.net/gh/DigitallyHappy/BackStrap/blob/master/src/css/style.min.css',
         // 'https://github.com/DigitallyHappy/BackStrap/blob/master/src/css/style.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css',
+        // 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css',
+        // 'https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.css',
 
         // Load the fonts separately (so that you can replace them at will):
         // 'packages/source-sans-pro/source-sans-pro.css',
