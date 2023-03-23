@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use \App\Models\AppType;
 use \App\Models\Skill;
 use \App\Models\User;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class Project extends Model
 {
@@ -40,11 +41,21 @@ class Project extends Model
         parent::boot();
 
         static::updating(function (Project $model) {
-            Storage::disk(env('Disk'))->delete(self::find($model->id)->image);
+            $image = self::find($model->id)->image;
+            if (env('IMAGE_UPLOAD') == 'local') {
+                Storage::disk(env('Disk'))->delete($image);
+            } else if (env('IMAGE_UPLOAD') == "cloudinary") {
+                Cloudinary::destroy($image);
+            }
         });
 
         static::deleting(function (Project $model) {
-            Storage::disk(env('Disk'))->delete(self::find($model->id)->image);
+            $image = self::find($model->id)->image;
+            if (env('IMAGE_UPLOAD') == 'local') {
+                Storage::disk(env('Disk'))->delete($image);
+            } else if (env('IMAGE_UPLOAD') == "cloudinary") {
+                Cloudinary::destroy($image);
+            }
         });
     }
 
@@ -83,7 +94,7 @@ class Project extends Model
 
     public function getImageAttribute($value)
     {
-        return env('Storage_Prefix').$value;
+        return env('IMAGE_UPLOAD') == 'local' ? env('Storage_Prefix').$value : $value;
     }
 
     /*
@@ -97,56 +108,44 @@ class Project extends Model
         $attribute_name = 'image';
         $destination_path = '/images/projects/';
 
-        // if the image was erased
-        // if($value == null){
-        //     // delete the image from cloud
-        //     Cloudder::destoryImage(Cloudder::getPublicId());
-        //     Cloudder::delete(Cloudder::getPublicId());
-        // }
-
-        // // if a base64 was sent, store it in the db
-        // if (starts_with($value, 'data:image'))
-        // {
-        //     // Generate a public_id
-        //     $public_id = md5($value.time());
-
-        //     // upload the image to Cloudinary
-        //     Cloudder::upload($value,null, ['folder' => $destination_path, 'public_id' => $public_id]);
-
-        //     // get image url from cloudinary
-        //     //$image_url = Cloudder::secureShow(Cloudder::getPublicId());
-	    //     $image_url = Cloudder::secureShow(Cloudder::getPublicId(), ['width'=> 'auto', 'height' => 1200, 'crop'=> 'fit']);
-
-        //     // Save the path to the database
-        //     $this->attributes[$attribute_name] = $image_url;
-        // }
-
-
-            // local storage image upload
-       // if the image was erased
-       if ($value == null){
-           // delete the image from disk
-           Storage::disk(env('Disk'))->delete($this->{$attribute_name});
-
-           // set null in the database column
-           $this->attributes[$attribute_name] = null;
-       }
-
-       // if a base64 was sent, store it in the db
-       if (Str::startsWith($value, 'data:image'))
-       {
-           // Make the image
-           $image = Image::make($value);
-
-           // Generate a filename
-           $filename = $destination_path . md5($value.time()).'.jpg';
-
-           // Store the image on the disk.
-           Storage::disk(env('Disk'))->put($filename, $image->stream());
-
-           // Save the path to the database
-           $this->attributes[$attribute_name] = $filename;
-       }
+        if (env('IMAGE_UPLOAD') == "cloudinary") {
+            // if a base64 was sent, store it in the db
+            if (Str::startsWith($value, 'data:image')){
+                // Generate a public_id
+                $public_id = md5($value.time());
+                // upload the image to Cloudinary
+                $uploadedFileUrl = Cloudinary::upload($value, [
+                    'folder' => $destination_path,
+                    'transformation' => [['width'=> 'auto', 'height' => 1200, 'crop'=> 'fit']],
+                    'public_id' => $public_id
+                ])->getSecurePath();
+                // get image url from cloudinary
+                $image_url = $uploadedFileUrl;
+                // $image_url = Cloudinary::getUrl($uploadedFileUrl);
+                // Save the path to the database
+                $this->attributes[$attribute_name] = $image_url;
+            }
+        } else if (env('IMAGE_UPLOAD') == "local") {
+            // if the image was erased
+            if ($value == null) {
+                // delete the image from disk
+                Storage::disk(env('Disk'))->delete($this->{$attribute_name});
+                // set null in the database column
+                $this->attributes[$attribute_name] = null;
+            }
+            // if a base64 was sent, store it in the db
+            if (Str::startsWith($value, 'data:image'))
+            {
+                // Make the image
+                $image = Image::make($value);
+                // Generate a filename
+                $filename = $destination_path . md5($value.time()).'.jpg';
+                // Store the image on the disk.
+                Storage::disk(env('Disk'))->put($filename, $image->stream());
+                // Save the path to the database
+                $this->attributes[$attribute_name] = $filename;
+            }
+        }
     }
 
 }

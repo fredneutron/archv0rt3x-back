@@ -178,7 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
     ],
 
     /*
@@ -233,7 +233,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
-
+        'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
     ],
 
 ];

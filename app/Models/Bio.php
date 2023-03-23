@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class Bio extends Model
 {
@@ -37,11 +38,21 @@ class Bio extends Model
         parent::boot();
 
         static::updating(function (Bio $model) {
-            Storage::disk(env('Disk'))->delete(self::find($model->id)->{'profile_picture'});
+            $image = self::find($model->id)->{'profile_picture'};
+            if (env('IMAGE_UPLOAD') == 'local') {
+                Storage::disk(env('Disk'))->delete($image);
+            } else if (env('IMAGE_UPLOAD') == "cloudinary") {
+                Cloudinary::destroy($image);
+            }
         });
 
         static::deleting(function (Bio $model) {
-            Storage::disk(env('Disk'))->delete(self::find($model->id)->{'profile_picture'});
+            $image = self::find($model->id)->{'profile_picture'};
+            if (env('IMAGE_UPLOAD') == 'local') {
+                Storage::disk(env('Disk'))->delete($image);
+            } else if (env('IMAGE_UPLOAD') == "cloudinary") {
+                Cloudinary::destroy($image);
+            }
         });
     }
 
@@ -68,7 +79,7 @@ class Bio extends Model
 
     public function getProfilePictureAttribute($value)
     {
-        return env('Storage_Prefix').$value;
+        return env('IMAGE_UPLOAD') == 'local' ? env('Storage_Prefix').$value : $value;
     }
 
     public function getFullName()
@@ -87,27 +98,20 @@ class Bio extends Model
         $attribute_name = 'profile_picture';
         $destination_path = '/images/profile_picture/';
 
-        // if the image was erased
         if (env('IMAGE_UPLOAD') == "cloudinary") {
-            if($value == null){
-                // delete the image from cloud
-                Cloudder::destoryImage(Cloudder::getPublicId());
-                Cloudder::delete(Cloudder::getPublicId());
-            }
-    
             // if a base64 was sent, store it in the db
-            if (Str::startsWith($value, 'data:image'))
-            {
+            if (Str::startsWith($value, 'data:image')){
                 // Generate a public_id
                 $public_id = md5($value.time());
-    
                 // upload the image to Cloudinary
-                Cloudder::upload($value,null, ['folder' => $destination_path, 'public_id' => $public_id]);
-    
+                $uploadedFileUrl = Cloudinary::upload($value, [
+                    'folder' => $destination_path,
+                    'transformation' => [['width'=> 300, 'height' => 300, 'crop'=> 'fit']],
+                    'public_id' => $public_id
+                ])->getSecurePath();
                 // get image url from cloudinary
-                //$image_url = Cloudder::secureShow(Cloudder::getPublicId());
-                $image_url = Cloudder::secureShow(Cloudder::getPublicId(), ['width'=> 'auto', 'height' => 1200, 'crop'=> 'fit']);
-    
+                $image_url = $uploadedFileUrl;
+                // $image_url = Cloudinary::getUrl($uploadedFileUrl);
                 // Save the path to the database
                 $this->attributes[$attribute_name] = $image_url;
             }
@@ -116,23 +120,18 @@ class Bio extends Model
             if ($value == null) {
                 // delete the image from disk
                 Storage::disk(env('Disk'))->delete($this->{$attribute_name});
-
                 // set null in the database column
                 $this->attributes[$attribute_name] = null;
             }
-
             // if a base64 was sent, store it in the db
             if (Str::startsWith($value, 'data:image'))
             {
                 // Make the image
                 $image = Image::make($value);
-
                 // Generate a filename
                 $filename = $destination_path . md5($value.time()).'.jpg';
-
                 // Store the image on the disk.
                 Storage::disk(env('Disk'))->put($filename, $image->stream());
-
                 // Save the path to the database
                 $this->attributes[$attribute_name] = $filename;
             }
