@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['http://api.'.env('APP_URL').'/*'],
+    'paths' => ['*'],
 
     'allowed_methods' => ['*'],
 
