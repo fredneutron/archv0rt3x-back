@@ -71,7 +71,7 @@ class ArchV0rt3xController extends Controller
 
             if ($client) {
                 // send client mail to Admin
-                $admin = $this->sendMail('email.Admin', [
+                $admin = $this->sendMail('email.admin', [
                     'view' => [
                         'name' => $clientName,
                         'email' => $clientEmail,
